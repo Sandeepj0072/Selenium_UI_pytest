@@ -1,0 +1,8 @@
+stages:
+  - run
+
+job--to-run-the-code:
+  stage: run
+  image: python:3.10
+  script:
+    - python hello.py
