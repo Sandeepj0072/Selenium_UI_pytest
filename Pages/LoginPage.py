@@ -4,8 +4,6 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from Locators.locators import *
 
-glpat-li74qHdfFR6qgaU_ApLA2mM6MQpvOjEKdTpqb2praA8.01.171cb2y2y
-
 class LoginPage:
      def __init__(self,driver):
          self.driver=driver
@@ -30,4 +28,6 @@ class LoginPage:
          self.email_input(email)
 
          self.click_confirm()
+
+
 
