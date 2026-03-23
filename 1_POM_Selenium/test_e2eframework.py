@@ -1,19 +1,30 @@
+import os.path
+import sys
 
 from selenium import webdriver
 from time import sleep
 
 from selenium.webdriver import ActionChains
 from selenium.webdriver.support.wait import WebDriverWait
-
-from Pages.LoginPage import LoginPage
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 
-def test_e2e(browserInstance):
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from pageObjects.login import LoginPage
+
+def test_e2eframework(browserInstance):
 
     driver=browserInstance
-    driver.find_element(By.CSS_SELECTOR, "a[href*='shop']").click()  # here *means contains
+
+    driver.get("https://rahulshettyacademy.com/loginpagePractise/")
+
+    login=LoginPage(driver)
+    login.login()
+
+
+    # driver.find_element(By.CSS_SELECTOR, "a[href*='shop']").click()  # here *means contains
 
     # //div[@class='card h-100']/div/h4/a
     # product=//div[@class='card h-100']
