@@ -1,52 +1,53 @@
+#pytest -n 2 #for running parallelly
+#pytest -m smoke #to run smoke tests only
+#pytest run all tests
+#pytest -m smoke --browser_name chrome --html=reports/report.html
+
+
+import json
 import os.path
 import sys
-
-from selenium import webdriver
 from time import sleep
 
-from selenium.webdriver import ActionChains
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import Select
-
+import pytest
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from pageObjects.login import LoginPage
+from pageObjects.ShopPage import ShopPage
 
-def test_e2eframework(browserInstance):
+test_data_path='./data/test_e2eframework.json'
+
+with open(test_data_path) as f:
+    test_data=json.load(f)
+    test_list=test_data["data"]
+
+@pytest.mark.smoke
+@pytest.mark.parametrize("test_list_item",test_list)
+def test_e2eframework(browserInstance,test_list_item):
 
     driver=browserInstance
-
-    driver.get("https://rahulshettyacademy.com/loginpagePractise/")
-
     login=LoginPage(driver)
-    login.login()
 
+    print(login.getTitle())
+
+    login.login(test_list_item["userEmail"],test_list_item["password"])
 
     # driver.find_element(By.CSS_SELECTOR, "a[href*='shop']").click()  # here *means contains
 
     # //div[@class='card h-100']/div/h4/a
     # product=//div[@class='card h-100']
 
-    products = driver.find_elements(By.XPATH, "//div[@class='card h-100']")
-    for product in products:
-        product_name = product.find_element(By.XPATH, "div/h4/a").text
-        if product.text == 'Blackberry':
-            product.find_element(By.XPATH, "div/button").click()
+    shop = ShopPage(driver)
+    print(shop.getTitle())
+    shop.add_products_to_cart(test_list_item["productName"])
+    checkout_confirmation=shop.goToCart()
+    checkout_confirmation.checkout()
+    checkout_confirmation.enter_delivery_address("India")
+    checkout_confirmation.validate_order()
 
-    driver.find_element(By.CSS_SELECTOR, "a[class='nav-link btn btn-primary']").click()
 
-    driver.find_element(By.CSS_SELECTOR, ".btn.btn-success").click()
 
-    driver.find_element(By.CSS_SELECTOR, "#country").send_keys("India")
-    wait = WebDriverWait(driver, 10)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".suggestions")))
-    driver.find_element(By.CSS_SELECTOR, ".suggestions").click()
 
-    driver.find_element(By.XPATH, "//div[@class='checkbox checkbox-primary']").click()
-
-    driver.find_element(By.CSS_SELECTOR, "input[type='submit']").click()
     sleep(2)
 
 
