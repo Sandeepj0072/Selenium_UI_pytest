@@ -1,0 +1,47 @@
+# Company-style CI: run automated UI tests on every push/PR to main
+name: Selenium UI Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  pytest-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements/requirements.txt
+
+      - name: Install Google Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements/requirements.txt
+
+      - name: Run smoke tests (headless)
+        env:
+          CI: False
+        run: |
+          mkdir -p reports
+          pytest tests/ -m smoke --browser_name chrome \
+            --html=reports/report.html --self-contained-html -v
+
+      - name: Upload pytest HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-html-report
+          path: reports/report.html
+          if-no-files-found: ignore
