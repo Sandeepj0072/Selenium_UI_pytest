@@ -9,8 +9,6 @@ class ShopPage(BrowserUtils):
     def __init__(self,driver):
 
         super().__init__(driver)
-        self.driver=driver
-
 
     def add_products_to_cart(self,product_name):
 

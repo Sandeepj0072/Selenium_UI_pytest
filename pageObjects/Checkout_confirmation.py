@@ -10,8 +10,9 @@ class Checkout_Confirmation(BrowserUtils):
     def __init__(self,driver):
 
         super().__init__(driver)  # here we are initializing parent class coinstructor to driver so that our utils will get driver
-
-        self.driver=driver
+        #
+        # self.driver=driver    You remove it because super().__init__(driver) already does the same job —
+        # assigning self.driver happens once in the parent, not again in every page object.
 
 
     def checkout(self):

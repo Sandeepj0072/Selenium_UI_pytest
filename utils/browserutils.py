@@ -1,9 +1,8 @@
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
-
 from selenium.webdriver.common.action_chains import ActionChains
-
+from selenium.webdriver.remote.webdriver import WebDriver
 
 class BrowserUtils:
 
@@ -44,17 +43,17 @@ class BrowserUtils:
         # -------------------------
 
     def select_by_visible_text(self, locator, text):
-        element = self.driver.find_element(*locator)
+        element = self.find_element(locator)
 
         Select(element).select_by_visible_text(text)
 
     def select_by_value(self, locator, value):
-        element = self.driver.find_element(*locator)
+        element = self.find_element(locator)
 
         Select(element).select_by_value(value)
 
     def select_by_index(self, locator, index):
-        element = self.driver.find_element(*locator)
+        element = self.find_element(locator)
 
         Select(element).select_by_index(index)
 
@@ -65,24 +64,24 @@ class BrowserUtils:
         # -------------------------
 
     def hover(self, locator):
-        element = self.driver.find_element(*locator)
+        element = self.find_element(locator)
 
         ActionChains(self.driver).move_to_element(element).perform()
 
     def right_click(self, locator):
-        element = self.driver.find_element(*locator)
+        element = self.find_element(locator)
 
         ActionChains(self.driver).context_click(element).perform()
 
     def double_click(self, locator):
-        element = self.driver.find_element(*locator)
+        element = self.find_element(locator)
 
         ActionChains(self.driver).double_click(element).perform()
 
     def drag_and_drop(self, source_locator, target_locator):
-        source = self.driver.find_element(*source_locator)
+        source = self.find_element(source_locator)
 
-        target = self.driver.find_element(*target_locator)
+        target = self.find_element(target_locator)
 
         ActionChains(self.driver).drag_and_drop(source, target).perform()
 

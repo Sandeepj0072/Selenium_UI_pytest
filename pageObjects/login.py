@@ -11,8 +11,6 @@ class LoginPage(BrowserUtils):
 
         super().__init__(driver) #here we are initializing parent class coinstructor to driver so that our utils will get driver
 
-        self.driver=driver #this driver is avaialble,the moment you attach this piece here you can use it anywhere
-
     def login(self,username,password):
 
         self.type(LoginLocators.USERNAME_INPUT,username)
